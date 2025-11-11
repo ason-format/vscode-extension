@@ -1,0 +1,141 @@
+{
+  "name": "vscode-ason",
+  "displayName": "ASON Compression",
+  "description": "Compress and decompress JSON using ASON format (20-60% token reduction for LLMs)",
+  "version": "1.0.0",
+  "publisher": "ason-format",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Formatters",
+    "Other"
+  ],
+  "keywords": [
+    "ason",
+    "json",
+    "compression",
+    "llm",
+    "tokens",
+    "formatter"
+  ],
+  "activationEvents": [
+    "onCommand:ason.compressSelection",
+    "onCommand:ason.decompressSelection",
+    "onCommand:ason.showStats"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ason.compressSelection",
+        "title": "ASON: Compress Selection",
+        "category": "ASON"
+      },
+      {
+        "command": "ason.decompressSelection",
+        "title": "ASON: Decompress Selection",
+        "category": "ASON"
+      },
+      {
+        "command": "ason.showStats",
+        "title": "ASON: Show Compression Stats",
+        "category": "ASON"
+      }
+    ],
+    "configuration": {
+      "title": "ASON",
+      "properties": {
+        "ason.indent": {
+          "type": "number",
+          "default": 1,
+          "description": "Indentation level for nested structures"
+        },
+        "ason.delimiter": {
+          "type": "string",
+          "default": ",",
+          "description": "Field delimiter for uniform arrays"
+        },
+        "ason.useReferences": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable object reference aliasing"
+        },
+        "ason.useDictionary": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable inline-first value dictionary"
+        },
+        "ason.autoShowStats": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically show statistics after compression"
+        }
+      }
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorHasSelection",
+          "command": "ason.compressSelection",
+          "group": "1_modification"
+        },
+        {
+          "when": "editorHasSelection",
+          "command": "ason.decompressSelection",
+          "group": "1_modification"
+        },
+        {
+          "when": "editorHasSelection",
+          "command": "ason.showStats",
+          "group": "1_modification"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "ason.compressSelection",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "ason.decompressSelection",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "ason.showStats",
+          "when": "editorHasSelection"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "tsup",
+    "watch": "tsup --watch",
+    "package": "vsce package",
+    "publish": "vsce publish",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vscode/vsce": "^3.0.0",
+    "eslint": "^8.56.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@ason-format/ason": "^1.1.2"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ason-format/vscode-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ason-format/vscode-extension/issues"
+  },
+  "homepage": "https://github.com/ason-format/vscode-extension#readme"
+}

@@ -1,0 +1,39 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build extension
+        run: npm run build
+
+      - name: Verify build output
+        run: |
+          if [ ! -f "dist/extension.js" ]; then
+            echo "Error: Extension build failed"
+            exit 1
+          fi
+          echo "✓ VS Code extension builds successfully"
+
+      - name: Lint
+        run: |
+          if grep -q '"lint"' package.json; then
+            npm run lint
+          fi

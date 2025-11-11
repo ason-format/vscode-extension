@@ -1,0 +1,26 @@
+# CODEOWNERS file for ASON VS Code Extension
+# This file defines code ownership for the repository
+# Learn more: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owners - will be requested for review on all PRs
+* @SeanLuis
+
+# Source code
+/src/ @SeanLuis
+
+# Documentation files
+*.md @SeanLuis
+LICENSE @SeanLuis
+
+# Test files
+/tests/ @SeanLuis
+
+# Configuration files
+package.json @SeanLuis
+*.config.js @SeanLuis
+tsconfig.json @SeanLuis
+
+# Security and community files
+/CODE_OF_CONDUCT.md @SeanLuis
+/CONTRIBUTING.md @SeanLuis
+/SECURITY.md @SeanLuis
