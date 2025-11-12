@@ -1,5 +1,5 @@
 {
-  "name": "vscode-ason",
+  "name": "ason-mcp",
   "displayName": "ASON Compression",
   "description": "Compress and decompress JSON using ASON format (20-60% token reduction for LLMs)",
   "version": "1.0.0",

@@ -1,0 +1,38 @@
+# Source files
+src/
+*.ts
+tsconfig.json
+tsup.config.js
+
+# Build artifacts
+*.vsix
+*.map
+
+# Dependencies (solo necesitas las de runtime en dist/)
+node_modules/
+package-lock.json
+
+# Development files
+.vscode/
+.vscode-test/
+.claude/
+scripts/
+mcp.json
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation (excepto los principales)
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+CODEOWNERS
+RELEASE.md
+SECURITY.md
+
+# Misc
+*.log
+.DS_Store
+.eslintrc*
+.prettierrc*
