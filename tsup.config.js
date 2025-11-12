@@ -2,15 +2,15 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entry: ["src/extension.ts"],
-  format: ["cjs"], // VS Code extensions use CommonJS
+  format: ["cjs"],
   dts: false,
   splitting: false,
-  sourcemap: true,
+  sourcemap: false,
   clean: true,
-  minify: false, // Keep readable for debugging
+  minify: true,
   treeshake: true,
   outDir: "dist",
-  external: ["vscode"], // VS Code API is always external
+  external: ["vscode"],
   platform: "node",
   target: "node18",
   async onSuccess() {
