@@ -30,18 +30,38 @@
     "commands": [
       {
         "command": "ason.compressSelection",
-        "title": "ASON: Compress Selection",
+        "title": "Compress Selection",
         "category": "ASON"
       },
       {
         "command": "ason.decompressSelection",
-        "title": "ASON: Decompress Selection",
+        "title": "Decompress Selection",
         "category": "ASON"
       },
       {
         "command": "ason.showStats",
-        "title": "ASON: Show Compression Stats",
+        "title": "Show Compression Stats",
         "category": "ASON"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "ason.compressSelection",
+        "key": "ctrl+alt+c",
+        "mac": "cmd+alt+c",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "ason.decompressSelection",
+        "key": "ctrl+alt+d",
+        "mac": "cmd+alt+d",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "ason.showStats",
+        "key": "ctrl+alt+s",
+        "mac": "cmd+alt+s",
+        "when": "editorHasSelection"
       }
     ],
     "configuration": {
