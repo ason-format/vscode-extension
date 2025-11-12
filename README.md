@@ -1,22 +1,52 @@
 # ASON for VS Code
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![VS Code](https://img.shields.io/badge/VS%20Code-1.85+-blue.svg)](https://code.visualstudio.com/)
+[![VS Code](https://img.shields.io/badge/VS%20Code-1.99+-blue.svg)](https://code.visualstudio.com/)
+[![MCP](https://img.shields.io/badge/MCP-Enabled-green.svg)](https://modelcontextprotocol.io)
 
 Compress and decompress JSON using the ASON format directly in Visual Studio Code. Reduce token usage by 20-60% for LLM applications while maintaining 100% lossless round-trip fidelity.
 
 ## Two Ways to Use ASON in VS Code
 
-### 1. Extension Commands (This Extension)
+### 1. Extension Commands
 - Direct commands for manual compression/decompression
+- Keyboard shortcuts: `Cmd+Alt+C` (compress), `Cmd+Alt+D` (decompress), `Cmd+Alt+S` (stats)
 - Accessible via Command Palette or right-click menu
 - Perfect for one-off conversions
 
-### 2. MCP Server Integration (GitHub Copilot)
-- Automatic integration with GitHub Copilot Chat
+### 2. MCP Server Integration (Automatic)
+- **Automatically configured** when you install this extension!
+- Works with GitHub Copilot Chat (requires VS Code 1.99+)
 - Copilot can use ASON tools automatically
-- Ask Copilot: "Compress this JSON" and it uses ASON
-- See [MCP_SETUP.md](./MCP_SETUP.md) for configuration
+- Ask Copilot: "Compress this JSON using ASON" and it works!
+- No manual configuration needed - it just works!
+
+## Installation
+
+### From VS Code Marketplace
+
+1. Open VS Code
+2. Go to Extensions (`Cmd+Shift+X` / `Ctrl+Shift+X`)
+3. Search for "ASON"
+4. Click **Install**
+5. MCP server is automatically configured for Copilot!
+
+### Requirements
+
+- **VS Code 1.99+** (for MCP server integration)
+- **Node.js 18+** (for MCP server via npx)
+- **GitHub Copilot** (optional, for automatic tool access)
+
+### What Happens on Install
+
+When you install this extension:
+
+1. ✅ Extension commands are registered (`ASON: Compress`, etc.)
+2. ✅ MCP server is **automatically configured** for GitHub Copilot
+3. ✅ ASON tools become available in Copilot Chat
+4. ✅ No manual configuration needed!
+
+The MCP server uses `npx @ason-format/mcp-server@latest`, so it always stays up-to-date.
 
 ## Features
 

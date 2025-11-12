@@ -6,10 +6,12 @@
   "publisher": "ason-format",
   "icon": "icon.png",
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.99.0"
   },
   "categories": [
     "Formatters",
+    "AI",
+    "MCP",
     "Other"
   ],
   "keywords": [
@@ -18,15 +20,22 @@
     "compression",
     "llm",
     "tokens",
-    "formatter"
+    "formatter",
+    "mcp",
+    "copilot",
+    "claude"
   ],
   "activationEvents": [
-    "onCommand:ason.compressSelection",
-    "onCommand:ason.decompressSelection",
-    "onCommand:ason.showStats"
+    "onStartupFinished"
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "ason-mcp",
+        "label": "ASON MCP Server"
+      }
+    ],
     "commands": [
       {
         "command": "ason.compressSelection",
@@ -41,6 +50,11 @@
       {
         "command": "ason.showStats",
         "title": "Show Compression Stats",
+        "category": "ASON"
+      },
+      {
+        "command": "ason.showMcpStatus",
+        "title": "Show MCP Server Status",
         "category": "ASON"
       }
     ],
