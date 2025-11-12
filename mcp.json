@@ -1,0 +1,15 @@
+{
+  "servers": {
+    "ason": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@ason-format/mcp-server@latest"],
+      "env": {
+        "ASON_INDENT": "1",
+        "ASON_DELIMITER": ",",
+        "ASON_USE_REFERENCES": "true",
+        "ASON_USE_DICTIONARY": "true"
+      }
+    }
+  }
+}

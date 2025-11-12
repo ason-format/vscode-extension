@@ -5,12 +5,26 @@
 
 Compress and decompress JSON using the ASON format directly in Visual Studio Code. Reduce token usage by 20-60% for LLM applications while maintaining 100% lossless round-trip fidelity.
 
+## Two Ways to Use ASON in VS Code
+
+### 1. Extension Commands (This Extension)
+- Direct commands for manual compression/decompression
+- Accessible via Command Palette or right-click menu
+- Perfect for one-off conversions
+
+### 2. MCP Server Integration (GitHub Copilot)
+- Automatic integration with GitHub Copilot Chat
+- Copilot can use ASON tools automatically
+- Ask Copilot: "Compress this JSON" and it uses ASON
+- See [MCP_SETUP.md](./MCP_SETUP.md) for configuration
+
 ## Features
 
 - **Compress JSON to ASON**: Convert selected JSON to token-optimized ASON format
 - **Decompress ASON to JSON**: Restore ASON back to original JSON (lossless)
 - **Compression Statistics**: View detailed metrics on token and byte savings
 - **Configurable Settings**: Customize compression behavior per workspace
+- **MCP Server Support**: Use with GitHub Copilot Chat (VS Code 1.99+)
 
 ## Commands
 
