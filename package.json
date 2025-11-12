@@ -4,7 +4,7 @@
   "description": "Compress and decompress JSON using ASON format (20-60% token reduction for LLMs)",
   "version": "1.0.0",
   "publisher": "ason-format",
-  "icon": "icon.png",
+  "icon": "icon.svg",
   "engines": {
     "vscode": "^1.99.0"
   },
