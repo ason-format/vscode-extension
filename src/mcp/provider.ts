@@ -1,43 +1,14 @@
 import * as vscode from "vscode";
-import * as path from "path";
-import * as fs from "fs";
 import { getConfig } from "../utils/config";
-
-/**
- * Finds the MCP server executable path
- * @param {string} baseDir - Base directory (__dirname from extension)
- * @returns {string | undefined} Path to server or undefined
- */
-function findServerPath(baseDir: string): string | undefined {
-  const devPath = path.join(baseDir, "..", "..", "mcp-server", "dist", "index.js");
-  const packagedPath = path.join(
-    baseDir,
-    "..",
-    "node_modules",
-    "@ason-format",
-    "mcp-server",
-    "dist",
-    "index.js",
-  );
-
-  if (fs.existsSync(devPath)) {
-    return devPath;
-  } else if (fs.existsSync(packagedPath)) {
-    return packagedPath;
-  }
-
-  return undefined;
-}
 
 /**
  * Registers ASON MCP server definition provider with VS Code
  * This makes the server available to MCP clients like Claude Code
+ * Uses npx to run the published @ason-format/mcp-server package
  * @param {vscode.ExtensionContext} context - Extension context
- * @param {string} baseDir - Base directory (__dirname from extension)
  */
 export function registerMcpProvider(
   context: vscode.ExtensionContext,
-  baseDir: string,
 ): void {
   console.log("Checking for MCP API...", {
     hasLm: !!vscode.lm,
@@ -60,20 +31,13 @@ export function registerMcpProvider(
       provideMcpServerDefinitions: async () => {
         console.log("provideMcpServerDefinitions called!");
         const config = getConfig();
-        const serverPath = findServerPath(baseDir);
 
-        if (!serverPath) {
-          console.error("MCP server not found at development or packaged paths");
-          vscode.window.showErrorMessage(
-            "ASON MCP server not found. Please ensure the server is built.",
-          );
-          return [];
-        }
-
+        // Use npx to run published MCP server
+        console.log("Using npx @ason-format/mcp-server");
         const serverDef = new vscode.McpStdioServerDefinition(
-          "ASON",
-          "node",
-          [serverPath],
+          "ASON Compression - JSON token optimizer for LLMs",
+          "npx",
+          ["-y", "@ason-format/mcp-server@latest"],
           {
             ASON_INDENT: config.indent.toString(),
             ASON_DELIMITER: config.delimiter,
@@ -83,9 +47,8 @@ export function registerMcpProvider(
         );
 
         console.log("Providing MCP server definition:", {
-          label: "ASON",
-          command: "node",
-          serverPath,
+          label: "ASON Compression",
+          detail: "JSON token optimizer for LLMs",
           config,
         });
 

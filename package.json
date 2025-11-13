@@ -24,7 +24,11 @@
     "claude"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onCommand:ason.compressSelection",
+    "onCommand:ason.decompressSelection",
+    "onCommand:ason.showStats",
+    "onCommand:ason.showMcpStatus"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -126,16 +130,13 @@
       ],
       "commandPalette": [
         {
-          "command": "ason.compressSelection",
-          "when": "editorHasSelection"
+          "command": "ason.compressSelection"
         },
         {
-          "command": "ason.decompressSelection",
-          "when": "editorHasSelection"
+          "command": "ason.decompressSelection"
         },
         {
-          "command": "ason.showStats",
-          "when": "editorHasSelection"
+          "command": "ason.showStats"
         }
       ]
     }

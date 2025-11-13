@@ -32,47 +32,12 @@ function getMcpConfigPath(): string {
 }
 
 /**
- * Finds the MCP server executable path
- * Tries development path first, then packaged path
- * @param {string} baseDir - Base directory (__dirname from extension)
- * @returns {string | undefined} Path to server or undefined if not found
- */
-function findServerPath(baseDir: string): string | undefined {
-  // Try development path first (for debugging)
-  const devPath = path.join(baseDir, "..", "..", "mcp-server", "dist", "index.js");
-
-  // Try packaged extension path
-  const packagedPath = path.join(
-    baseDir,
-    "..",
-    "node_modules",
-    "@ason-format",
-    "mcp-server",
-    "dist",
-    "index.js",
-  );
-
-  if (fs.existsSync(devPath)) {
-    console.log("Using development MCP server path:", devPath);
-    return devPath;
-  } else if (fs.existsSync(packagedPath)) {
-    console.log("Using packaged MCP server path:", packagedPath);
-    return packagedPath;
-  }
-
-  console.log("No local server found");
-  return undefined;
-}
-
-/**
  * Auto-configures MCP server in user's global configuration
- * Creates or updates mcp.json with ASON server configuration
+ * Creates or updates mcp.json with ASON server configuration using npx
  * @param {vscode.ExtensionContext} context - Extension context
- * @param {string} baseDir - Base directory (__dirname from extension)
  */
 export async function autoConfigureMcpServer(
   context: vscode.ExtensionContext,
-  baseDir: string,
 ): Promise<void> {
   try {
     const userMcpPath = getMcpConfigPath();
@@ -95,7 +60,7 @@ export async function autoConfigureMcpServer(
       }
     }
 
-    const asonServerExists = !!mcpConfig.servers.ason;
+    const asonServerExists = !!mcpConfig.servers["ason-mcp"];
     const hasBeenNotified = context.globalState.get(
       "ason.mcpConfigNotified",
       false,
@@ -104,84 +69,42 @@ export async function autoConfigureMcpServer(
     if (asonServerExists) {
       console.log("ASON MCP server already configured");
 
-      // Check if using npx (needs update to local path)
-      const currentConfig = mcpConfig.servers.ason;
-      const isUsingNpx = currentConfig.command === "npx";
-
-      // Only show prompt once
+      // Only show notification once
       if (!hasBeenNotified) {
         context.globalState.update("ason.mcpConfigNotified", true);
-
-        if (isUsingNpx) {
-          vscode.window
-            .showWarningMessage(
-              "ASON MCP is configured but using npx (package not published yet). Update to use local path?",
-              "Update to Local Path",
-              "Keep Current",
-            )
-            .then((selection) => {
-              if (selection === "Update to Local Path") {
-                delete mcpConfig.servers.ason;
-                fs.writeFileSync(
-                  userMcpPath,
-                  JSON.stringify(mcpConfig, null, 2),
-                );
-                vscode.commands.executeCommand("workbench.action.reloadWindow");
-              }
-            });
-        } else {
-          vscode.window
-            .showInformationMessage(
-              "ASON MCP server is already configured and operational. Click the ASON icon in the status bar to manage it.",
-              "Show Status",
-            )
-            .then((selection) => {
-              if (selection === "Show Status") {
-                vscode.commands.executeCommand("ason.showMcpStatus");
-              }
-            });
-        }
+        vscode.window
+          .showInformationMessage(
+            "ASON MCP server is already configured and operational. Click the ASON icon in the status bar to view details.",
+            "OK",
+          );
       }
 
       updateStatusBar("operational", 4);
       return;
     }
 
-    // Configure new server
+    // Configure new server with npx
     const config = getConfig();
-    const serverPath = findServerPath(baseDir);
+    console.log("Configuring ASON MCP server with npx");
 
-    if (serverPath) {
-      // Use local path with node command
-      mcpConfig.servers.ason = {
-        type: "stdio",
-        command: "node",
-        args: [serverPath],
-        env: {
-          ASON_INDENT: config.indent.toString(),
-          ASON_DELIMITER: config.delimiter,
-          ASON_USE_REFERENCES: config.useReferences.toString(),
-          ASON_USE_DICTIONARY: config.useDictionary.toString(),
-        },
-      };
-    } else {
-      // Fallback to npx (only works if published)
-      mcpConfig.servers.ason = {
-        type: "stdio",
-        command: "npx",
-        args: ["-y", "@ason-format/mcp-server@latest"],
-        env: {
-          ASON_INDENT: config.indent.toString(),
-          ASON_DELIMITER: config.delimiter,
-          ASON_USE_REFERENCES: config.useReferences.toString(),
-          ASON_USE_DICTIONARY: config.useDictionary.toString(),
-        },
-      };
-    }
+    mcpConfig.servers["ason-mcp"] = {
+      type: "stdio",
+      command: "npx",
+      args: ["-y", "@ason-format/mcp-server@latest"],
+      env: {
+        ASON_INDENT: config.indent.toString(),
+        ASON_DELIMITER: config.delimiter,
+        ASON_USE_REFERENCES: config.useReferences.toString(),
+        ASON_USE_DICTIONARY: config.useDictionary.toString(),
+      },
+    };
 
     // Write configuration
     fs.writeFileSync(userMcpPath, JSON.stringify(mcpConfig, null, 2));
-    console.log("ASON MCP server auto-configured in user profile:", userMcpPath);
+    console.log(
+      "ASON MCP server auto-configured in user profile:",
+      userMcpPath,
+    );
 
     vscode.window
       .showInformationMessage(
@@ -197,7 +120,7 @@ export async function autoConfigureMcpServer(
       });
   } catch (error) {
     console.error("Failed to auto-configure MCP server:", error);
-    updateStatusBar("error");
+    updateStatusBar("not-configured");
     vscode.window.showWarningMessage(
       'Could not auto-configure ASON MCP server. Please configure manually using "MCP: Open User Configuration"',
     );

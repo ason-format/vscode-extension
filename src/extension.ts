@@ -11,6 +11,7 @@ import { registerMcpProvider } from "./mcp/provider";
 import {
   checkMcpStatus,
   showMcpStatus,
+  openMcpConfig,
   getStatusBarItem,
 } from "./mcp/statusBar";
 
@@ -31,6 +32,7 @@ export function activate(context: vscode.ExtensionContext): void {
     ),
     vscode.commands.registerCommand("ason.showStats", showStats),
     vscode.commands.registerCommand("ason.showMcpStatus", showMcpStatus),
+    vscode.commands.registerCommand("ason.openMcpConfig", openMcpConfig),
   );
 
   // Initialize MCP status bar
@@ -39,12 +41,12 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(getStatusBarItem());
 
   // Auto-configure MCP server (async, non-blocking)
-  autoConfigureMcpServer(context, __dirname).catch((err) => {
+  autoConfigureMcpServer(context).catch((err) => {
     console.error("Error in autoConfigureMcpServer:", err);
   });
 
   // Register MCP server provider for clients like Claude Code
-  registerMcpProvider(context, __dirname);
+  registerMcpProvider(context);
 
   // Show welcome message on first activation
   const hasShownWelcome = context.globalState.get("hasShownWelcome", false);

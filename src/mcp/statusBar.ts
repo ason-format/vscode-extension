@@ -46,7 +46,7 @@ export function updateStatusBar(
   if (!statusBarItem) {
     statusBarItem = vscode.window.createStatusBarItem(
       vscode.StatusBarAlignment.Right,
-      100,
+      10,
     );
   }
 
@@ -54,28 +54,57 @@ export function updateStatusBar(
     case "operational":
       // Green color for operational status - visible in all themes
       statusBarItem.text = `$(pass-filled) ASON`;
-      statusBarItem.tooltip = `ASON MCP Server: Operational\n${toolCount ? `${toolCount} tools available` : ""}\nClick to view configuration`;
+
+      // Rich tooltip with markdown support
+      const tooltip = new vscode.MarkdownString();
+      tooltip.isTrusted = true;
+      tooltip.supportHtml = true;
+      tooltip.appendMarkdown(`### ASON MCP Server\n\n`);
+      tooltip.appendMarkdown(`**Status:** ✓ Operational\n\n`);
+      tooltip.appendMarkdown(`**Tools Available:** ${toolCount || 4}\n`);
+      tooltip.appendMarkdown(`- compress_json\n`);
+      tooltip.appendMarkdown(`- decompress_ason\n`);
+      tooltip.appendMarkdown(`- get_compression_stats\n`);
+      tooltip.appendMarkdown(`- configure_compressor\n\n`);
+      tooltip.appendMarkdown(`**Command:** npx @ason-format/mcp-server@latest\n\n`);
+      tooltip.appendMarkdown(`_Click to open mcp.json_`);
+
+      statusBarItem.tooltip = tooltip;
       statusBarItem.backgroundColor = undefined;
       statusBarItem.color = new vscode.ThemeColor("terminal.ansiGreen");
       break;
     case "not-configured":
       // Yellow/warning color - visible in all themes
       statusBarItem.text = "$(warning) ASON";
-      statusBarItem.tooltip =
-        "ASON MCP Server: Not configured\nClick to configure";
+
+      const warningTooltip = new vscode.MarkdownString();
+      warningTooltip.isTrusted = true;
+      warningTooltip.appendMarkdown(`### ASON MCP Server\n\n`);
+      warningTooltip.appendMarkdown(`**Status:** ⚠ Not configured\n\n`);
+      warningTooltip.appendMarkdown(`_Click to configure_`);
+
+      statusBarItem.tooltip = warningTooltip;
       statusBarItem.backgroundColor = undefined;
       statusBarItem.color = new vscode.ThemeColor("editorWarning.foreground");
       break;
     case "error":
       // Red color for errors - visible in all themes
       statusBarItem.text = "$(error) ASON";
-      statusBarItem.tooltip = "ASON MCP Server: Error\nClick to view details";
+
+      const errorTooltip = new vscode.MarkdownString();
+      errorTooltip.isTrusted = true;
+      errorTooltip.appendMarkdown(`### ASON MCP Server\n\n`);
+      errorTooltip.appendMarkdown(`**Status:** ✗ Error\n\n`);
+      errorTooltip.appendMarkdown(`_Click to view details_`);
+
+      statusBarItem.tooltip = errorTooltip;
       statusBarItem.backgroundColor = undefined;
       statusBarItem.color = new vscode.ThemeColor("errorForeground");
       break;
   }
 
-  statusBarItem.command = "ason.showMcpStatus";
+  // Open mcp.json on click
+  statusBarItem.command = "ason.openMcpConfig";
   statusBarItem.show();
 }
 
@@ -88,7 +117,7 @@ export async function checkMcpStatus(): Promise<void> {
 
     if (fs.existsSync(userMcpPath)) {
       const mcpConfig = JSON.parse(fs.readFileSync(userMcpPath, "utf8"));
-      if (mcpConfig.servers && mcpConfig.servers.ason) {
+      if (mcpConfig.servers && mcpConfig.servers["ason-mcp"]) {
         // Server is configured - 4 tools available
         updateStatusBar("operational", 4);
         return;
@@ -116,9 +145,9 @@ export async function showMcpStatus(): Promise<void> {
 
     if (fs.existsSync(userMcpPath)) {
       const mcpConfig = JSON.parse(fs.readFileSync(userMcpPath, "utf8"));
-      if (mcpConfig.servers && mcpConfig.servers.ason) {
+      if (mcpConfig.servers && mcpConfig.servers["ason-mcp"]) {
         isConfigured = true;
-        const asonConfig = mcpConfig.servers.ason;
+        const asonConfig = mcpConfig.servers["ason-mcp"];
         configDetails =
           `**Configuration Path:** ${userMcpPath}\n\n` +
           `**Command:** ${asonConfig.command} ${asonConfig.args?.join(" ") || ""}\n\n` +
@@ -179,7 +208,7 @@ export async function showMcpStatus(): Promise<void> {
           vscode.commands.executeCommand("workbench.action.reloadWindow");
         } else if (selected.label.includes("Remove")) {
           const mcpConfig = JSON.parse(fs.readFileSync(userMcpPath, "utf8"));
-          delete mcpConfig.servers.ason;
+          delete mcpConfig.servers["ason-mcp"];
           fs.writeFileSync(userMcpPath, JSON.stringify(mcpConfig, null, 2));
           vscode.window
             .showInformationMessage(
@@ -223,6 +252,26 @@ export async function showMcpStatus(): Promise<void> {
 }
 
 /**
+ * Opens the MCP configuration file (mcp.json)
+ */
+export async function openMcpConfig(): Promise<void> {
+  try {
+    const userMcpPath = getMcpConfigPath();
+
+    if (fs.existsSync(userMcpPath)) {
+      const doc = await vscode.workspace.openTextDocument(userMcpPath);
+      await vscode.window.showTextDocument(doc);
+    } else {
+      vscode.window.showInformationMessage(
+        "MCP configuration file not found. Install the extension to create it.",
+      );
+    }
+  } catch (error) {
+    vscode.window.showErrorMessage(`Failed to open mcp.json: ${error}`);
+  }
+}
+
+/**
  * Gets the status bar item instance
  * @returns {vscode.StatusBarItem} Status bar item
  */
@@ -230,7 +279,7 @@ export function getStatusBarItem(): vscode.StatusBarItem {
   if (!statusBarItem) {
     statusBarItem = vscode.window.createStatusBarItem(
       vscode.StatusBarAlignment.Right,
-      100,
+      10,
     );
   }
   return statusBarItem;

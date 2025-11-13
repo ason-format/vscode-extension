@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0] - 2025-01-11
+## [1.0.0] - 2025-01-12
 
 ### Added
 - **Initial Release** - Complete Visual Studio Code extension for ASON compression
@@ -31,13 +31,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Configuration used
   - ASON preview
 - **Welcome Message** - First-activation guide with "Learn More" link
-- **Built with tsup** - Optimized bundling for fast loading
+- **MCP Server Integration**:
+  - Automatic configuration for GitHub Copilot (VS Code 1.99+)
+  - MCP provider for Claude Code and other MCP clients
+  - Uses `npx @ason-format/mcp-server@latest` in production
+  - Development mode detection for local testing
+- **Status Bar Indicator**:
+  - Real-time MCP server status (operational/not-configured/error)
+  - Rich tooltip with markdown showing tools and configuration
+  - Clean positioning to avoid UI conflicts
+- **Modular Architecture** - Clean separation of commands, MCP, and utilities
+- **Built with tsup** - Optimized bundling with full dependency inclusion
 
 ### Features
 - In-place text replacement (compresses/decompresses selected text)
 - Error handling with user-friendly messages
 - Preserves indentation when decompressing to JSON
 - Works with any text selection (no file type restrictions)
+- Keyboard shortcuts: Cmd+Alt+C (compress), Cmd+Alt+D (decompress), Cmd+Alt+S (stats)
 
 ### Dependencies
 - `@ason-format/ason@^1.1.2` - Core ASON library
