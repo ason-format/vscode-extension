@@ -7,7 +7,8 @@ export interface AsonConfig {
   indent: number;
   delimiter: string;
   useReferences: boolean;
-  useDictionary: boolean;
+  useSections: boolean;
+  useTabular: boolean;
   autoShowStats: boolean;
 }
 
@@ -19,9 +20,10 @@ export function getConfig(): AsonConfig {
   const config = vscode.workspace.getConfiguration("ason");
   return {
     indent: config.get<number>("indent", 1),
-    delimiter: config.get<string>("delimiter", ","),
+    delimiter: config.get<string>("delimiter", "|"),
     useReferences: config.get<boolean>("useReferences", true),
-    useDictionary: config.get<boolean>("useDictionary", true),
+    useSections: config.get<boolean>("useSections", true),
+    useTabular: config.get<boolean>("useTabular", true),
     autoShowStats: config.get<boolean>("autoShowStats", true),
   };
 }

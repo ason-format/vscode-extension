@@ -28,7 +28,8 @@ export async function compressSelection(): Promise<void> {
       indent: config.indent,
       delimiter: config.delimiter,
       useReferences: config.useReferences,
-      useDictionary: config.useDictionary,
+      useSections: config.useSections,
+      useTabular: config.useTabular,
     });
 
     // Parse and compress JSON

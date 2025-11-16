@@ -28,7 +28,8 @@ export async function showStats(): Promise<void> {
       indent: config.indent,
       delimiter: config.delimiter,
       useReferences: config.useReferences,
-      useDictionary: config.useDictionary,
+      useSections: config.useSections,
+      useTabular: config.useTabular,
     });
 
     // Parse JSON and compress to analyze
@@ -58,7 +59,8 @@ export async function showStats(): Promise<void> {
     outputChannel.appendLine(`Indent:             ${config.indent}`);
     outputChannel.appendLine(`Delimiter:          "${config.delimiter}"`);
     outputChannel.appendLine(`Use References:     ${config.useReferences}`);
-    outputChannel.appendLine(`Use Dictionary:     ${config.useDictionary}\n`);
+    outputChannel.appendLine(`Use Sections:       ${config.useSections}`);
+    outputChannel.appendLine(`Use Tabular:        ${config.useTabular}\n`);
     outputChannel.appendLine("=== ASON Preview ===\n");
     outputChannel.appendLine(ason);
 

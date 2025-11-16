@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0-preview] - 2025-01-14
+
+### Changed
+- **BREAKING: ASON 2.0 Support** - Extension now uses ASON 2.0 format
+- **Configuration Options Updated**:
+  - ❌ Removed `ason.useDictionary` setting (no longer exists in ASON 2.0)
+  - ✅ Added `ason.useSections` - Enable `@section` organization for objects (default: true)
+  - ✅ Added `ason.useTabular` - Enable `key:[N]{fields}` tabular arrays (default: true)
+  - Changed default `ason.delimiter` from `","` to `"|"` (pipe is more token-efficient)
+- **Syntax Updates**:
+  - Compressed output now uses `users:[2]{id,name}` instead of `users:[2]@id,name`
+  - Tabular data uses pipe delimiter `|` by default: `1|Alice|25` instead of `1,Alice,25`
+  - References use `$var` semantic names
+  - Sections use `@section` for objects
+- **TypeScript Interface Updates**:
+  - `AsonConfig` interface updated with new options
+  - `SmartCompressor` now called with correct ASON 2.0 options
+- **MCP Server Integration**:
+  - Environment variables updated: `ASON_USE_SECTIONS`, `ASON_USE_TABULAR` (replacing `ASON_USE_DICTIONARY`)
+  - MCP provider passes correct options to latest `@ason-format/mcp-server`
+- **Updated Documentation**:
+  - README.md updated with ASON 2.0 syntax examples
+  - Configuration table updated with new settings
+  - All code examples show correct pipe-delimited output
+
+### Dependencies
+- Updated `@ason-format/ason` to `^2.0.0-preview` (from `^1.1.2`)
+
+### Migration Notes
+- **User Settings**: If you have custom ASON settings in VS Code:
+  - Remove or rename `"ason.useDictionary"` → Not needed (enabled by default via sections/tabular)
+  - Consider changing `"ason.delimiter": ","` → `"|"` for better token efficiency
+- **MCP Configuration**: Auto-configured MCP servers will use new options automatically
+- **Output Format**: Compressed ASON will look different but is 100% lossless and more token-efficient
+
 ## [1.0.0] - 2025-01-12
 
 ### Added

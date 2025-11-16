@@ -91,9 +91,9 @@ Access commands via:
 
 **After:**
 ```
-users:[2]@id,name,age
-1,Alice,25
-2,Bob,30
+users:[2]{id,name,age}
+1|Alice|25
+2|Bob|30
 ```
 
 ### Decompress ASON
@@ -122,15 +122,16 @@ Bytes Saved:        108 bytes
 === Configuration ===
 
 Indent:             1
-Delimiter:          ","
+Delimiter:          "|"
 Use References:     true
-Use Dictionary:     true
+Use Sections:       true
+Use Tabular:        true
 
 === ASON Preview ===
 
-users:[2]@id,name,age
-1,Alice,25
-2,Bob,30
+users:[2]{id,name,age}
+1|Alice|25
+2|Bob|30
 ```
 
 ## Configuration
@@ -140,9 +141,10 @@ Configure ASON behavior in your workspace settings (`Cmd+,` / `Ctrl+,`):
 ```json
 {
   "ason.indent": 1,
-  "ason.delimiter": ",",
+  "ason.delimiter": "|",
   "ason.useReferences": true,
-  "ason.useDictionary": true,
+  "ason.useSections": true,
+  "ason.useTabular": true,
   "ason.autoShowStats": true
 }
 ```
@@ -152,9 +154,10 @@ Configure ASON behavior in your workspace settings (`Cmd+,` / `Ctrl+,`):
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
 | `ason.indent` | number | `1` | Indentation level for nested structures |
-| `ason.delimiter` | string | `","` | Field delimiter for uniform arrays |
-| `ason.useReferences` | boolean | `true` | Enable object reference aliasing (`&obj0`) |
-| `ason.useDictionary` | boolean | `true` | Enable inline-first value dictionary (`value #0`) |
+| `ason.delimiter` | string | `"|"` | Field delimiter for tabular arrays (pipe, comma, or tab) |
+| `ason.useReferences` | boolean | `true` | Enable `$var` reference deduplication |
+| `ason.useSections` | boolean | `true` | Enable `@section` organization for objects |
+| `ason.useTabular` | boolean | `true` | Enable `key:[N]{fields}` tabular format for arrays |
 | `ason.autoShowStats` | boolean | `true` | Show statistics after compression |
 
 ## Use Cases
@@ -168,7 +171,7 @@ Compress data before sending to OpenAI, Claude, or other LLM APIs:
 const json = {"users": [{"id": 1, "name": "Alice"}, ...]};
 
 // Send 60 tokens (60% reduction)
-const ason = "users:[2]@id,name\n1,Alice\n...";
+const ason = "users:[2]{id,name}\n1|Alice\n...";
 ```
 
 ### Optimize LocalStorage

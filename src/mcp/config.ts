@@ -95,7 +95,8 @@ export async function autoConfigureMcpServer(
         ASON_INDENT: config.indent.toString(),
         ASON_DELIMITER: config.delimiter,
         ASON_USE_REFERENCES: config.useReferences.toString(),
-        ASON_USE_DICTIONARY: config.useDictionary.toString(),
+        ASON_USE_SECTIONS: config.useSections.toString(),
+        ASON_USE_TABULAR: config.useTabular.toString(),
       },
     };
 
