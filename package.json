@@ -2,7 +2,7 @@
   "name": "ason-mcp",
   "displayName": "ASON Compression",
   "description": "Compress and decompress JSON using ASON format (20-60% token reduction for LLMs)",
-  "version": "1.0.0",
+  "version": "2.0.0-preview",
   "publisher": "ason-format",
   "icon": "icon.png",
   "engines": {
@@ -90,18 +90,23 @@
         },
         "ason.delimiter": {
           "type": "string",
-          "default": ",",
-          "description": "Field delimiter for uniform arrays"
+          "default": "|",
+          "description": "Field delimiter for tabular arrays (pipe, comma, or tab)"
         },
         "ason.useReferences": {
           "type": "boolean",
           "default": true,
-          "description": "Enable object reference aliasing"
+          "description": "Enable $var reference deduplication"
         },
-        "ason.useDictionary": {
+        "ason.useSections": {
           "type": "boolean",
           "default": true,
-          "description": "Enable inline-first value dictionary"
+          "description": "Enable @section organization for objects"
+        },
+        "ason.useTabular": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable key:[N]{fields} tabular format for arrays"
         },
         "ason.autoShowStats": {
           "type": "boolean",
@@ -160,7 +165,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@ason-format/ason": "^1.1.2"
+    "@ason-format/ason": "^2.0.0-preview"
   },
   "license": "MIT",
   "repository": {
