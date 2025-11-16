@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.0.0-preview] - 2025-01-14
+## [2.0.0] - 2025-01-14
 
 ### Changed
 - **BREAKING: ASON 2.0 Support** - Extension now uses ASON 2.0 format
